@@ -17,8 +17,13 @@ export let find_all = async (sort: string = 'rank', order: string = 'asc', time:
   return await Model.App.find({}).sort(create_sort_query(sort, order, time))
 }
 
-export let find_approved = async (approved:boolean, sort: string = 'rank', order:string = 'asc', time: string = 'last_week') => {
-  return await Model.App.find({ approved }).sort(create_sort_query(sort, order, time))
+export let find_approved = async (approved:boolean = null, sort: string = 'rank', order:string = 'asc', time: string = 'last_week', name?:string, app_type?:string, category?:string) => {
+  let q = {}
+  if(name) q['name'] = name
+  if(app_type) q['app_type'] = app_type
+  if(category) q['category'] = category
+  if(approved !== null) q['approved'] = approved
+  return await Model.App.find(q).sort(create_sort_query(sort, order, time))
 }
 
 export let find_approved_lean = async (approved:boolean, sort: string = 'rank', order: string = 'asc', time: string = 'last_week') => {

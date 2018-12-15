@@ -29,21 +29,13 @@ export let create_app = async (req, res, next) => {
   } else {
     res.status(400).send({ error: 'Something went wrong.' })
   }
-  
 }
 
 export let get_apps = async (req, res) => {
-  let { all, approved, sort, order, time } = req.query
+  let { approved, sort, order, time, name, app_type, category } = req.query
   if(approved === 'false') approved = false
-  if(approved !== false) approved = true
-  if(all === 'false') all = false
-  if(all === 'true') all = true
+  if(approved === 'true') approved = true
 
-  let apps = []
-  if(all) {
-    apps = await db_app.find_all(sort, order, time)
-  } else {
-    apps = await db_app.find_approved(approved, sort, order, time)
-  }
+  let apps = await db_app.find_approved(approved, sort, order, time, name, app_type, category)
   return res.status(200).send({ apps })
 }
