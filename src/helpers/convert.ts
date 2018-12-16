@@ -34,7 +34,8 @@ export let get_change = (x: {}) => {
     let before = x[`before_${d}`] - 1 || 0
 
     //x[`change_${d}`] = `${((x[d] / x[`before_${d}`] - 1) * 100).toFixed(2)}%`
-    x[`change_${d}`] = parseFloat((current / before).toFixed(3))
+    let change = parseFloat((current / before).toFixed(3))
+    x[`change_${d}`] = isNaN(change) ? 0 : change
   }
   return x
 }

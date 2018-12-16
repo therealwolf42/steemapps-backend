@@ -2,7 +2,7 @@ import * as celebrate from 'celebrate'
 const Joi: any = celebrate.Joi
 
 export default {
-  index: {
+  get: {
     query: Joi.object().keys({
       name: Joi.string(),
       app_type: Joi.string().valid('app', 'dapp', 'interface'),

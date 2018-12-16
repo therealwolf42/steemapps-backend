@@ -1,19 +1,3 @@
-/*import * as cast from '../helpers/cast'//import * as db_account from '../database/account.db'
-import { create_user_token } from '../helpers/token'
-
-export let login = async (req, res, next) => {
-  let { name } = req.body
-
-  let account = //await db_account.find_or_create(name)
-  if (!account.api_token) {
-    let token: String = create_user_token(name)
-    account.api_token = token
-    await account.save()
-  }
-
-  res.status(200).send({ name, api_token: account.api_token })
-}*/
-
 import * as db_app from '../database/app.db'
 
 export let create_app = async (req, res, next) => {

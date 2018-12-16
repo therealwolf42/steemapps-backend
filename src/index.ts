@@ -41,22 +41,24 @@ export let start = async () => {
 let main = async () => {
   while (true) {
     try {
-      // Update Global Properties for calculation of Vests to Steempower
-      console.log('update_global_properties')
-      await update_global_properties()
+      if (process.env.NODE_ENV === 'production') {
+        // Update Global Properties for calculation of Vests to Steempower
+        console.log('update_global_properties')
+        await update_global_properties()
 
-      // Update the data from approved Apps
-      console.log('update_data')
-      await update_data()
+        // Update the data from approved Apps
+        console.log('update_data')
 
-      // Set the data from approved Apps
-      console.log('set_data')
-      await set_data()
+        await update_data()
 
-      // Sets the rank for approved Apps
-      console.log('update_rank')
-      await update_rank()
+        // Set the data from approved Apps
+        console.log('set_data')
+        if (process.env.NODE_ENV === 'production') await set_data()
 
+        // Sets the rank for approved Apps
+        console.log('update_rank')
+        if (process.env.NODE_ENV === 'production') await update_rank()
+      }
       console.log('Finished round - waiting 0.2 hours')
       await _g.wait_hour(0.2)
     } catch (error) {
