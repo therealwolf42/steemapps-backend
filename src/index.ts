@@ -42,6 +42,7 @@ export let start = async () => {
 let main = async () => {
   while (true) {
     try {
+      console.log(process.env.NODE_ENV)
       if (process.env.NODE_ENV === 'production') {
         // Update Global Properties for calculation of Vests to Steempower
         console.log('update_global_properties')
