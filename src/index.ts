@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv'; dotenv.config({ path: '.env' });
 import * as db from './helpers/database'
 import * as mongoose from 'mongoose'
 
@@ -53,11 +54,11 @@ let main = async () => {
 
         // Set the data from approved Apps
         console.log('set_data')
-        if (process.env.NODE_ENV === 'production') await set_data()
+        await set_data()
 
         // Sets the rank for approved Apps
         console.log('update_rank')
-        if (process.env.NODE_ENV === 'production') await update_rank()
+        await update_rank()
       }
       console.log('Finished round - waiting 0.2 hours')
       await _g.wait_hour(0.2)
