@@ -4,8 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "win_dev": "cross-env NODE_ENV=development nodemon dist/server.js",
+    "win_prod": "cross-env NODE_ENV=production && tsc && node dist/server.js",
     "dev": "cross-env NODE_ENV=development nodemon dist/server.js",
-    "start": "cross-env NODE_ENV=production && tsc && node dist/server.js"
+    "start": "tsc && cross-env NODE_ENV=production node dist/server.js"
   },
   "author": "therealwolf42",
   "license": "MIT",
