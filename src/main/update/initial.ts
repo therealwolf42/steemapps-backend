@@ -226,6 +226,115 @@ export const create_initial_apps = async () => {
     '', 'https://utopian.io', {}, 'live', _g.category.social,
     ['steem', 'open-source', 'app'], [], _g.app_type.dapp)
 
+  let share2steem = await db_app.create(
+    'share2steem', 'Share2Steem', 'Monetize your social networks', 'share2steem',
+    [
+      {
+        name: 'share2steem',
+        account_types: ['benefactor', 'meta', 'curation']
+      }
+    ],
+    '', 'https://share2steem.com', { discord: 'https://discord.gg/3DfXG6K', twitter: 'https://twitter.com/share2steem_off' }, 'live', _g.category.social,
+    ['steem', 'social-media', 'app'], [], _g.app_type.app)
+
+  let dpoll = await db_app.create(
+    'dpoll', 'dPoll', 'A poll app operating on STEEM', 'dpoll',
+    [
+      {
+        name: 'dpoll',
+        account_types: ['meta']
+      },
+      {
+        name: 'dpoll.curation',
+        account_types: ['curation', 'benefactor']
+      },
+      {
+        name: 'dpoll.sponsors',
+        account_types: ['benefactor']
+      }
+    ],
+    'https://i.postimg.cc/Y934Sm7w/dpoll-logo.png', 'https://dpoll.xyz', { discord: 'https://discord.gg/ZcV8SGr' }, 'live', _g.category.entertainment,
+    ['steem', 'dpoll', 'app'], [], _g.app_type.app)
+
+  let peakmonsters = await db_app.create(
+    'peakmonsters', 'Peak Monsters', 'Trading Market for Steem Monsters', 'peakmonsters',
+    [
+      {
+        name: 'peakmonsters',
+        account_types: ['transfer']
+      },
+      {
+        name: 'peakmonsters-kr',
+        account_types: ['transfer']
+      },
+      {
+        name: 'peakmonsters-cn',
+        account_types: ['transfer']
+      },
+    ],
+    '', 'https://peakmonsters.com', { discord: 'https://discord.gg/YU2hsTU' }, 'live', _g.category.utility,
+    ['steem', 'steemmonsters', 'app'], [], _g.app_type.app)
+
+  let steemauto = await db_app.create(
+    'steemauto', 'Steemauto', 'Free and unlimited tools for Steem', 'steemauto',
+    [
+      {
+        name: 'steemauto',
+        account_types: ['transfer', 'meta', 'benefactor']
+      }
+    ],
+    '', 'https://steemauto.com', { discord: 'https://discord.gg/qhKDfEp' }, 'beta', _g.category.utility,
+    ['steem', 'app', 'tool'], [], _g.app_type.app)
+
+  let steemq = await db_app.create(
+    'steemq', 'SteemQ', 'Q&A App about Science, Technology, Engineering and Mathematics', 'stemq',
+    [
+      {
+        name: 'stemq',
+        account_types: ['transfer', 'meta', 'curation', 'benefactor']
+      }
+    ],
+    '', 'https://www.stemq.io', { discord: 'https://discord.gg/qhKDfEp' }, 'live', _g.category.education,
+    ['steem', 'app', 'science', 'engineering', 'mathematics', 'education', 'Q&A'], [], _g.app_type.app)
+
+  let steeve = await db_app.create(
+    'steeve', 'Steeve', 'An AI-powered Steem interface', 'steeveapp',
+    [
+      {
+        name: 'steeve',
+        account_types: ['meta']
+      },
+      {
+        name: 'steeveapp',
+        account_types: ['meta', 'benefactor']
+      },
+      {
+        name: 'steevebot',
+        account_types: ['curation', 'benefactor']
+      }
+    ],
+    '', 'https://www.steeve.app', { discord: 'https://discordapp.com/invite/ywzmg3c' }, 'beta', _g.category.content_discovery,
+    ['steem', 'content', 'discovery', 'ai', 'curation'], [], _g.app_type.interface)
+
+  let actifit = await db_app.create(
+    'actifit', 'Actifit', 'Rewarding everyday activity', 'actifit',
+    [
+      {
+        name: 'actifit',
+        account_types: ['meta', 'curation', 'benefactor']
+      },
+      {
+        name: 'actifit.pay',
+        account_types: ['benefactor']
+      },
+      {
+        name: 'actifit.funds',
+        account_types: ['transfer', 'benefactor']
+      }
+    ],
+    '', 'https://actifit.io', { discord: 'https://discord.gg/aHtcA6r' }, 'beta', _g.category.health,
+    ['steem', 'health', 'fitness', 'sports', 'smt', 'afit'], [], _g.app_type.app)
+
   for (let app of await db_app.find_all()) {
     app.approved = true
     await app.save()

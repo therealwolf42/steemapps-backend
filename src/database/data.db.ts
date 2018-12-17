@@ -11,7 +11,13 @@ export let find = async (app?: string, account?: string, data_type?: string) => 
   return await Model.Data.find(q)
 }
 
-
+export let find_multiple_datatypes = async (app?: string, account?: string, data_types?: Array<string>) => {
+  let q: any = {}
+  if (app) q.app = app
+  if (account) q.account = account
+  if (data_types) q['$in'] = data_types
+  return await Model.Data.find(q)
+}
 
 export let get_date = async (when: string | 'today' | 'last_day' | 'before_last_day' | 'before_last_week' | 'last_week' | 'before_last_month' | 'last_month', app?: string, account?: string, data_type?: string) => {
   let x = await find(app, account, data_type)

@@ -14,7 +14,10 @@ export const category = {
   media: 'Media',
   security: 'Security',
   utility: 'Utility',
-  interface: 'Interface'
+  interface: 'Interface',
+  education: 'Education',
+  health: 'Health',
+  content_discovery: 'Content Discovery'
 }
 
 export const data_type = {
