@@ -357,6 +357,29 @@ export const create_initial_apps = async () => {
       ],
       '', 'https://www.minnowbooster.net', { discord: 'https:// discord.buildteam.io' }, 'live', _g.category.utility,
       ['steem', 'promotion', 'delegation'], [], _g.app_type.app)
+    
+    let themagicfrog = await db_app.create(
+     'themagicfrog', 'The Magic Frog', 'Collaborative Storytelling Game', 'the-magic-frog',
+     [
+       {
+         name: 'the-magic-frog',
+         account_types: ['transfer', 'curation', 'benefactor']
+       },
+       {
+         name: 'grenouille',
+         account_types: ['transfer', 'curation', 'benefactor']
+       },
+       {
+         name: 'der-zauberfrosch',
+         account_types: ['transfer', 'curation', 'benefactor']
+       },
+       {
+         name: 'sapo-magico',
+         account_types: ['transfer', 'curation', 'benefactor']
+       }
+     ],
+     '', 'https://the-magic-frog.com', { discord: 'https://discord.gg/x3EQjz4' }, 'live', _g.category.games,
+     ['steem', 'games', 'storytelling'], [], _g.app_type.dapp)
 
   for (let app of await db_app.find_all()) {
     app.approved = true
