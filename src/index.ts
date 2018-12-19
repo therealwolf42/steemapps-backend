@@ -25,7 +25,7 @@ export let start = async () => {
 
     // Create the initial Apps
     console.log('create_initial_apps')
-    await create_initial_apps()
+    //await create_initial_apps()
 
     main()
 
