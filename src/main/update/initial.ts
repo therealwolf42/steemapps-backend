@@ -298,8 +298,8 @@ export const create_initial_apps = async () => {
     '', 'https://steemauto.com', { discord: 'https://discord.gg/qhKDfEp' }, 'beta', _g.category.utility,
     ['steem', 'app', 'tool'], [], _g.app_type.app)
 
-  let steemq = await db_app.create(
-    'steemq', 'SteemQ', 'Q&A App about Science, Technology, Engineering and Mathematics', 'stemq',
+  let stemq = await db_app.create(
+    'stemq', 'StemQ', 'Q&A App about Science, Technology, Engineering and Mathematics', 'stemq',
     [
       {
         name: 'stemq',

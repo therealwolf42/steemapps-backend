@@ -24,7 +24,7 @@ export let dau_transfers = async (app: string, account: string, last_update) => 
     const data_incoming = convert_grouped_with_users(result_incoming)
     const data_outgoing = convert_grouped_with_users(result_outgoing)
     
-    let data = db_data.create_grouped_data_users(create_arr_of_arrays([data_incoming, data_outgoing]))
+    let data = data_incoming // db_data.create_grouped_data_users(create_arr_of_arrays([data_incoming, data_outgoing]))
 
     await db_data.create_or_add_both(app, data_type, data, account)
     await db_data.create_or_add_both(app, `${data_type}_outgoing`, db_data.create_grouped_data_users(data_outgoing), account) 

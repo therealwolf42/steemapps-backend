@@ -26,10 +26,12 @@ export let update_data = async () => {
       for (let acc of app.accounts) {
         try {
           // Incoming Transfers
-          if (acc.account_types.includes('transfer')) {
-            for (let asset of ['SBD', 'STEEM']) {
-              await volume_transfers(app.name, acc.name, asset, last_update_data)
-              await tx_transfers(app.name, acc.name, asset, last_update_data)
+          if (acc.account_types.includes('transfer') || acc.account_types.includes('transfer_only_dau')) {
+            if(!acc.account_types.includes('transfer_only_dau')) {
+              for (let asset of ['SBD', 'STEEM']) {
+                await volume_transfers(app.name, acc.name, asset, last_update_data)
+                await tx_transfers(app.name, acc.name, asset, last_update_data)
+              }
             }
             await dau_transfers(app.name, acc.name, last_update_data)
           }
