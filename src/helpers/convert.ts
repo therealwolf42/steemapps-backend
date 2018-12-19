@@ -1,3 +1,6 @@
+import * as moment from 'moment'
+import * as _ from 'lodash'
+
 export const objects_to_arr = (objects, attribute = 'name', max_num = 50) => {
   let num = max_num - 1
   let list = objects.map(e => { return e[attribute] })
@@ -28,6 +31,19 @@ export let add_values = (values) => {
   return x
 }
 
+export let add_values_total_users = (values) => {
+  let x = {}
+  for (let v of values) {
+    for (let key of Object.keys(v)) {
+      if (!x[key]) x[key] = 0
+      x[key] += v[key]
+    }
+  }
+  x = get_change(x)
+  return x
+}
+
+
 export let get_change = (x: {}) => {
   for (let d of ['last_day', 'last_week', 'last_month']) {
     let current = x[d] || 0
@@ -38,4 +54,43 @@ export let get_change = (x: {}) => {
     x[`change_${d}`] = isNaN(change) ? 0 : change
   }
   return x
+}
+
+export let remove_duplicates = (arr: Array<string>) => {
+  // Super slow - has to be fixed
+  let duplicates = arr.filter(x => arr.filter(y => y === x).length > 1)
+  let removed = []
+  for(let d of duplicates) {
+    if(removed.includes(d)) {
+      continue
+    }
+    let i = arr.indexOf(d)
+    arr.splice(i, 1)
+    removed.push(d)
+  }
+  return arr
+}
+
+export let create_arr_of_arrays = (arr_arr) => {
+  let arr = []
+  for(let a of arr_arr) {
+    arr = arr.concat(a)
+  }
+  return arr
+}
+
+export let create_grouped_array = (data, var_name = 'timestamp') => {
+  return _(data).groupBy(x => moment.utc(x[var_name]).toISOString()).value()
+}
+
+export let create_sum_array_of_group = (arr) => {
+  let values = []
+  for (let timestamp in arr) {
+    let value = 0
+    for(let x of arr[timestamp]) {
+      value += x.value ? x.value : 0
+    }
+    values.push({ value, timestamp })
+  }
+  return values
 }

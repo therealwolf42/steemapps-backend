@@ -72,13 +72,13 @@ const calculate_weight_for_sort_type = (value, sort_type) => {
   let point = 1
 
   if (sort_type === 'dau') {
-    point = 20
+    point = 30
   } else if (sort_type === 'tx') {
-    point = 0.35
+    point = 0.04
   } else if (sort_type.includes('volume') || sort_type.includes('rewards')) {
-    point = 0.2
+    point = 0.01
   } else if (sort_type.includes('steempower')) {
-    point = 0.001
+    point = 0.0005
   }
   return point * value
 }

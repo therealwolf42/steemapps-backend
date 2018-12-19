@@ -12,7 +12,7 @@ export let volume_transfers = async (app: string, account: string, asset: string
     const result = await query(q)
     const data_type = `VOLUME_TRANSFERS_${asset}`.toLowerCase()
     const data = convert_grouped(result)
-    await db_data.create_or_add(app, data_type, data, account)
+    await db_data.create_or_add_both(app, data_type, data, account)
   } catch (error) {
     console.error('volume_transfers', error)
   }

@@ -21,7 +21,7 @@ let last_update = moment.utc().subtract(30, 'd').toISOString()
 
 export const TIMESTAMP = (var_name = 'timestamp') => { return `YEAR(${var_name}), MONTH(${var_name}), DAY(${var_name})` }
 
-export const TIME_GROUP_QUERY = (last, var_name = 'timestamp') => { return `AND ${var_name} > '${last}' GROUP BY ${TIMESTAMP(var_name)} ORDER BY ${TIMESTAMP(var_name)} ASC;` }
+export const TIME_GROUP_QUERY = (last, var_name = 'timestamp', group_var = '') => { return `AND ${var_name} > '${last}' GROUP BY ${group_var ? `[${group_var}], ` : ''}${TIMESTAMP(var_name)} ORDER BY ${TIMESTAMP(var_name)} ASC;` }
 
 export let query = async (q: string) => {
   try {
@@ -44,4 +44,26 @@ export let convert_grouped = (result) => {
   })
   data = data.filter(x => moment.utc(x.timestamp).format('YYYY-MM-D') !== moment.utc().format('YYYY-MM-D'))
   return data
+}
+
+export let convert_grouped_with_users = (result) => {
+  let data = result.recordsets[0]
+  data = data.map(x => {
+    const from = Object.values(x)[0]
+    const time = Object.values(x)[1]
+    return {
+      from, timestamp: moment.utc(`${time[0]}-${time[1] < 10 ? '0' + time[1] : time[1]}-${time[2] < 10 ? '0' + time[2] : time[2]}`).toDate()
+    }
+  })
+  data = data.filter(x => moment.utc(x.timestamp).format('YYYY-MM-D') !== moment.utc().format('YYYY-MM-D'))
+
+  data = _(data).groupBy(x => moment.utc(x.timestamp).toISOString()).value()
+
+  let new_data = []
+  for(let timestamp in data) {
+    let timeframe = data[timestamp]
+    new_data.push({ value: timeframe.length, timestamp, users: timeframe.map(x => x.from) })
+  }
+  
+  return new_data
 }

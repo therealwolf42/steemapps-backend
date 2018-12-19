@@ -1,9 +1,11 @@
-import * as dotenv from 'dotenv'; dotenv.config({ path: '.env' });
+import * as dotenv from 'dotenv'; dotenv.config({ path: '.env' })
 import * as db from './helpers/database'
 import * as mongoose from 'mongoose'
 
 import { update_data, set_data } from './main/update/apps'
 import { update_rank } from './main/update/rank'
+
+import * as db_data from './database/data.db'
 
 import { update_global_properties } from './helpers/cast'
 import { create_initial_apps } from './main/update/initial'
@@ -42,8 +44,9 @@ export let start = async () => {
 let main = async () => {
   while (true) {
     try {
-      if (process.env.NODE_ENV === 'production') {
+      //if (process.env.NODE_ENV === 'production') {
         // Update Global Properties for calculation of Vests to Steempower
+
         console.log('update_global_properties')
         await update_global_properties()
 
@@ -59,7 +62,7 @@ let main = async () => {
         // Sets the rank for approved Apps
         console.log('update_rank')
         await update_rank()
-      }
+      //}
       console.log('Finished round - waiting 0.2 hours')
       await _g.wait_hour(0.2)
     } catch (error) {

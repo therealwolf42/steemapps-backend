@@ -35,7 +35,7 @@ export let create = async (name: string, display_name: string, description: stri
   try {
     return await Model.App.create({ name, display_name, description, main_account, accounts, image, link, social, status, category, tags, custom_jsons, app_type, last_update: moment.utc().toDate() })
   } catch (error) {
-    console.error(error.message)
+    //console.error(error.message)
   }
 }
 

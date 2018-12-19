@@ -271,6 +271,18 @@ export const create_initial_apps = async () => {
         name: 'peakmonsters-cn',
         account_types: ['transfer']
       },
+      {
+        name: 'peakcredit',
+        account_types: ['transfer']
+      },
+      {
+        name: 'peakcredit-kr',
+        account_types: ['transfer']
+      },
+      {
+        name: 'peakcredit-cn',
+        account_types: ['transfer']
+      },
     ],
     '', 'https://peakmonsters.com', { discord: 'https://discord.gg/YU2hsTU' }, 'live', _g.category.utility,
     ['steem', 'steemmonsters', 'app'], [], _g.app_type.app)
@@ -334,6 +346,17 @@ export const create_initial_apps = async () => {
     ],
     '', 'https://actifit.io', { discord: 'https://discord.gg/aHtcA6r' }, 'beta', _g.category.health,
     ['steem', 'health', 'fitness', 'sports', 'smt', 'afit'], [], _g.app_type.app)
+
+    let minnowbooster = await db_app.create(
+      'minnowbooster', 'Minnowbooster', 'Steem Power Delegation & Post Promotion Markets', 'minnowbooster',
+      [
+        {
+          name: 'minnowbooster',
+          account_types: ['transfer', 'curation', 'benefactor']
+        }
+      ],
+      '', 'https://www.minnowbooster.net', { discord: 'https:// discord.buildteam.io' }, 'live', _g.category.utility,
+      ['steem', 'promotion', 'delegation'], [], _g.app_type.app)
 
   for (let app of await db_app.find_all()) {
     app.approved = true

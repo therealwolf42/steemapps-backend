@@ -16,10 +16,10 @@ export let create_app = async (req, res, next) => {
 }
 
 export let get_apps = async (req, res) => {
-  let { approved, sort, order, time, name, app_type, category } = req.query
+  let { approved, sort, order, time, name, category, type } = req.query
   if(approved === 'false') approved = false
   if(approved === 'true') approved = true
 
-  let apps = await db_app.find_approved(approved, sort, order, time, name, app_type, category)
+  let apps = await db_app.find_approved(approved, sort, order, time, name, type, category)
   return res.status(200).send({ apps })
 }
