@@ -359,7 +359,7 @@ export const create_initial_apps = async () => {
       ['steem', 'promotion', 'delegation'], [], _g.app_type.app)
     
     let themagicfrog = await db_app.create(
-     'themagicfrog', 'The Magic Frog', 'Collaborative Storytelling Game', 'the-magic-frog',
+     'themagicfrog', 'The Magic Frog', 'Multilingual Collaborative Storytelling Game', 'the-magic-frog',
      [
        {
          name: 'the-magic-frog',
