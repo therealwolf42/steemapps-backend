@@ -132,3 +132,14 @@ export let create_grouped_data_users = (data) => {
   }
   return data_for_db
 }
+
+export let get_last_month_array = async (app:string, arr:Array<{ keys:any, values: any }>) => {
+  for(let a of arr) {
+    for(let account of a.keys) {
+      for(let data_type of a.values) {
+        let x = await find_intern(app, account, data_type)
+        let data = x.data.filter(y => y.timestamp >= moment.utc().subtract(30, 'd').toDate())
+      }
+    }
+  }
+}

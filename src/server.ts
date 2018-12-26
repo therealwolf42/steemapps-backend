@@ -10,8 +10,9 @@ import * as main from './index'
 
 import route_apps from './routes/app.route'
 import route_data from './routes/data.route'
-
-
+import route_categories from './routes/categories.route'
+import route_app_types from './routes/app_types.route'
+import route_data_types from './routes/data_types.route'
 
 const app = express()
 
@@ -30,7 +31,9 @@ app.use(cors())
 
 app.use('/api/apps', route_apps)
 app.use('/api/data', route_data)
-
+app.use('/api/categories', route_categories)
+app.use('/api/app_types', route_app_types)
+app.use('/api/data_types', route_data_types)
 app.use(celebrate.errors())
 
 app.listen(app.get('port'), async () => {

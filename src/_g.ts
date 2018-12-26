@@ -3,21 +3,22 @@ export const USE_TESTNET = false
 export let global_properties = {}
 
 export const category = {
-  games: 'Games',
-  entertainment: 'Entertainment',
-  exchanges: 'Exchanges',
-  gambling: 'Gambling',
-  wallet: 'Wallet',
-  finance: 'Finance',
-  promotion: 'Promotion',
-  social: 'Social',
-  media: 'Media',
-  security: 'Security',
-  utility: 'Utility',
-  interface: 'Interface',
-  education: 'Education',
-  health: 'Health',
-  content_discovery: 'Content Discovery'
+  games: 'games',
+  entertainment: 'entertainment',
+  exchanges: 'exchanges',
+  development: 'development',
+  gambling: 'gambling',
+  wallet: 'wallet',
+  finance: 'finance',
+  promotion: 'promotion',
+  social: 'social',
+  media: 'media',
+  security: 'security',
+  utility: 'utility',
+  interface: 'interface',
+  education: 'education',
+  health: 'health',
+  content_discovery: 'content discovery'
 }
 
 export const data_type = {
@@ -45,6 +46,26 @@ export const app_type = {
   app: 'app',
   dapp: 'dapp',
   interface: 'interface'
+}
+
+export const account_types = {
+  transfer: 'transfer',
+  benefactor: 'benefactor',
+  curation: 'curation',
+  transfer_only_dau: 'transfer_only_dau',
+  delegation: 'delegation',
+  meta: 'meta',
+  posting: 'posting',
+  logo: 'logo'
+}
+
+export const app_status = {
+  live: 'live',
+  beta: 'beta',
+  alpha: 'alpha',
+  workinprogress: 'work-in-progress',
+  concept: 'concept',
+  abandoned: 'abandoned'
 }
 
 export let processing_accounts = []
