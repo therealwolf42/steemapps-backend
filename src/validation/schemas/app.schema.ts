@@ -2,12 +2,12 @@ import * as celebrate from 'celebrate'
 const Joi: any = celebrate.Joi
 
 const socialSchema = Joi.object({
-  github: Joi.string().valid('').required(),
-    discord: Joi.string().allow(''),
-    twitter: Joi.string().allow(''),
-    medium: Joi.string().allow(''),
-    reddit: Joi.string().allow(''),
-    telegram: Joi.string().allow('')
+  github: Joi.string().allow(''),
+  discord: Joi.string().allow(''),
+  twitter: Joi.string().allow(''),
+  medium: Joi.string().allow(''),
+  reddit: Joi.string().allow(''),
+  telegram: Joi.string().allow('')
 }).required()
 
 const accountSchema = Joi.object({
