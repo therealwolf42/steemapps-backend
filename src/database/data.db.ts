@@ -133,6 +133,7 @@ export let create_grouped_data_users = (data) => {
   return data_for_db
 }
 
+// Experimental for next Update
 export let get_last_month_array = async (app:string, arr:Array<{ keys:any, values: any }>) => {
   for(let a of arr) {
     for(let account of a.keys) {

@@ -200,6 +200,7 @@ let update_tx = async (app_name, acc_name, custom_jsons) => {
       tx[i] = await get_date(app_name, custom, _g.data_type.tx_custom)
     }
 
+    // Experimental for next Update
     /*db_data.get_last_month_array(app_name, [
       {
         keys: [acc_name],
