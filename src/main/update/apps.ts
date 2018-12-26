@@ -21,13 +21,14 @@ export let update_data = async () => {
         continue
       }
 
-      let last_update_data = moment.utc().subtract(32, 'd').toISOString()
+      let last_update_data = moment.utc().subtract(62, 'd').toISOString()
       console.log('Updating data', app.name, moment.utc(app.last_update_data).day())
       for (let acc of app.accounts) {
+        
         try {
           // Incoming Transfers
-          if (acc.account_types.includes('transfer') || acc.account_types.includes('transfer_only_dau')) {
-            if(!acc.account_types.includes('transfer_only_dau')) {
+          if (acc.transfer || acc.transfer_only_dau) {
+            if(!acc.transfer_only_dau) {
               for (let asset of ['SBD', 'STEEM']) {
                 await volume_transfers(app.name, acc.name, asset, last_update_data)
                 await tx_transfers(app.name, acc.name, asset, last_update_data)
@@ -37,13 +38,13 @@ export let update_data = async () => {
           }
 
           // Meta Object on Comments (Used by interfaces)
-          if (acc.account_types.includes('meta')) {
+          if (acc.meta) {
             await tx_meta(app.name, acc.name, last_update_data)
             await dau_meta(app.name, acc.name, last_update_data)
           }
 
           // Benefactor Reward by Interfaces
-          if (acc.account_types.includes('benefactor')) {
+          if (acc.benefactor) {
             await dau_benefactor(app.name, acc.name, last_update_data)
             for (let asset of ['SBD', 'STEEM', 'VESTS']) {
               await rewards_benefactor(app.name, acc.name, asset, last_update_data)  
@@ -51,7 +52,7 @@ export let update_data = async () => {
           }
 
           // Curation Rewards
-          if (acc.account_types.includes('curation')) {
+          if (acc.curation) {
             await rewards_curation(app.name, acc.name, last_update_data)
           }
 
@@ -198,6 +199,19 @@ let update_tx = async (app_name, acc_name, custom_jsons) => {
       i += 1
       tx[i] = await get_date(app_name, custom, _g.data_type.tx_custom)
     }
+
+    // Experimental for next Update
+    /*db_data.get_last_month_array(app_name, [
+      {
+        keys: [acc_name],
+        values: [_g.data_type.tx_transfers_sbd, _g.data_type.tx_transfers_steem, _g.data_type.tx_meta]
+      },
+      {
+        keys: custom_jsons,
+        values: [_g.data_type.tx_custom]
+      }
+    ])*/
+
     return add_values(tx)
   } catch (error) {
     console.error('update_tx', error, app_name)

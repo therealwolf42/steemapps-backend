@@ -303,7 +303,7 @@ export const create_initial_apps = async () => {
     [
       {
         name: 'stemq',
-        account_types: ['transfer', 'meta', 'curation', 'benefactor']
+        account_types: ['transfer', 'meta', 'curation', 'benefactor',]
       }
     ],
     '', 'https://www.stemq.io', { discord: 'https://discord.gg/qhKDfEp' }, 'live', _g.category.education,

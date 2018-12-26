@@ -4,7 +4,9 @@ import * as mongoose from 'mongoose'
 
 import { update_data, set_data } from './main/update/apps'
 import { update_rank } from './main/update/rank'
+import { convert_accepted_submissions } from './main/submission/accept'
 
+import * as db_app from './database/app.db'
 import * as db_data from './database/data.db'
 
 import { update_global_properties } from './helpers/cast'
@@ -22,7 +24,8 @@ export let start = async () => {
     while (!connected) {
       await try_connection()
     }
-
+    
+    //await format_accounts()
     // Create the initial Apps
     console.log('create_initial_apps')
     //await create_initial_apps()
@@ -40,13 +43,40 @@ export let start = async () => {
   }
 }
 
+const format_accounts = async () => {
+  for(let app of await db_app.find_all()) {
+    let accounts = []
+    
+    for(let acc of app.accounts) {
+
+      let new_acc = {
+        id: app.accounts.indexOf(acc),
+        name: acc.name,
+        curation: acc.account_types.includes('curation'),
+        transfer: acc.account_types.includes('transfer'),
+        transfer_only_dau: acc.account_types.includes('transfer_only_dau'),
+        meta: acc.account_types.includes('meta'),
+        delegation: acc.account_types.includes('delegation'),
+        posting: acc.account_types.includes('posting')
+      }
+      accounts.push(new_acc)
+      console.log(acc, new_acc)
+    }
+    //process.exit()
+    app.accounts = accounts
+    app.save()
+  }
+}
+
 
 let main = async () => {
   while (true) {
     try {
-      //if (process.env.NODE_ENV === 'production') {
-        // Update Global Properties for calculation of Vests to Steempower
+      //if (process.env.NODE_ENV === 'production')
+        // Converts app-submissions into apps
+        await convert_accepted_submissions()
 
+        // Update Global Properties for calculation of Vests to Steempower
         console.log('update_global_properties')
         await update_global_properties()
 

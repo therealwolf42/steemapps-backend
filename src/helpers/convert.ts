@@ -94,3 +94,7 @@ export let create_sum_array_of_group = (arr) => {
   }
   return values
 }
+
+export let clean_string = (x) => {
+  return x.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').replace(' ', '').toLowerCase()
+}
