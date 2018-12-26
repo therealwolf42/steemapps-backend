@@ -31,9 +31,9 @@ export let find_approved_lean = async (approved:boolean, sort: string = 'rank', 
 }
 
 export let create = async (name: string, display_name: string, description: string, main_account: string, accounts: { name: string, account_types: Model.AccountType[] }[],
-  image: string, link: string, social: { discord?: string, twitter?: string, medium?: string, reddit?: string }, status: string, category: string, tags: string[], custom_jsons: string[], app_type: string | 'app' | 'dapp' | 'interface') => {
+  logo: string, link: string, social: { discord?: string, twitter?: string, medium?: string, reddit?: string }, status: string, category: string, tags: string[], custom_jsons: string[], app_type: string | 'app' | 'dapp' | 'interface') => {
   try {
-    return await Model.App.create({ name, display_name, description, main_account, accounts, image, link, social, status, category, tags, custom_jsons, app_type, last_update: moment.utc().toDate() })
+    return await Model.App.create({ name, display_name, description, main_account, accounts, logo, link, social, status, category, tags, custom_jsons, app_type, last_update: moment.utc().toDate() })
   } catch (error) {
     //console.error(error.message)
   }

@@ -28,7 +28,7 @@ const schema = new mongoose.Schema({
   app_type: { type: String, required: true },
   short_description: { type: String, required: false },
   description: { type: String, required: true },
-  image: { type: String },
+  logo: { type: String },
   link: { type: String },
   ref_link: { type: String },
   social: {

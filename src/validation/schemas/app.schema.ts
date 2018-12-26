@@ -48,7 +48,7 @@ export default {
       display_name: Joi.string().required(),
       link: Joi.string().required(),
       logo: Joi.string().allow(''),
-      image: Joi.string().allow(''),
+      logo: Joi.string().allow(''),
       product_screenshot: Joi.string().allow(''),
       description: Joi.string().required(),
       short_description: Joi.string().required(),
