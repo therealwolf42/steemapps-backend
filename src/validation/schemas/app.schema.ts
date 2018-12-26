@@ -44,7 +44,8 @@ export default {
   },
   submit: {
     body: Joi.object().keys({
-      name: Joi.string().required(),
+      name: Joi.string().allow(''),
+      display_name: Joi.string().required(),
       link: Joi.string().required(),
       logo: Joi.string().allow(''),
       image: Joi.string().allow(''),
