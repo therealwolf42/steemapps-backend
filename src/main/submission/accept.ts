@@ -6,6 +6,7 @@ import * as db_submission from '../../database/submission.db'
 
 export const convert_accepted_submissions = async () => {
   try {
+    let i = 0
     let submissions = await db_submission.find_approved()
     submissions = _(submissions).orderBy(['createdAt'], ['desc']).groupBy(x => x.name).value()
     //console.log(submissions)
@@ -25,9 +26,11 @@ export const convert_accepted_submissions = async () => {
         } else {
           await ModelApp.App.create(submission_object)
         }
+        i++
         await submission.remove()
       }
     }
+    return i
   } catch (error) {
     console.error('convert_accepted_submissions', error)
   }
