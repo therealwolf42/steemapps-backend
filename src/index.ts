@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv'; dotenv.config({ path: '.env' })
 import * as db from './helpers/database'
 import * as mongoose from 'mongoose'
+import * as moment from 'moment'
 
 import { update_data, set_data } from './main/update/apps'
 import { update_rank } from './main/update/rank'
@@ -19,6 +20,9 @@ var connection: any = {}
 
 export var stop_bool = false
 
+let last_day = moment.utc().dayOfYear()
+let startup = true
+
 export let start = async () => {
   try {
     while (!connected) {
@@ -29,7 +33,7 @@ export let start = async () => {
     // Create the initial Apps
     console.log('create_initial_apps')
     //await create_initial_apps()
-
+    
     main()
 
   } catch (e) {
@@ -72,9 +76,10 @@ const format_accounts = async () => {
 let main = async () => {
   while (true) {
     try {
-      //if (process.env.NODE_ENV === 'production')
-        // Converts app-submissions into apps
-        await convert_accepted_submissions()
+      let i = await convert_accepted_submissions()
+      if(last_day !== moment.utc().dayOfYear() || i > 0 || startup) {
+        if(last_day !== moment.utc().dayOfYear()) last_day = moment.utc().dayOfYear()
+        startup = false
 
         // Update Global Properties for calculation of Vests to Steempower
         console.log('update_global_properties')
@@ -92,7 +97,7 @@ let main = async () => {
         // Sets the rank for approved Apps
         console.log('update_rank')
         await update_rank()
-      //}
+      }
       console.log('Finished round - waiting 0.2 hours')
       await _g.wait_hour(0.2)
     } catch (error) {
