@@ -6,6 +6,7 @@ import * as moment from 'moment'
 import { update_data, set_data } from './main/update/apps'
 import { update_rank } from './main/update/rank'
 import { convert_accepted_submissions } from './main/submission/accept'
+import { query } from './main/queries/query'
 
 import * as db_app from './database/app.db'
 import * as db_data from './database/data.db'
@@ -28,11 +29,11 @@ export let start = async () => {
     while (!connected) {
       await try_connection()
     }
-    
-    //await format_accounts()
+
+    // await format_accounts()
     // Create the initial Apps
-    console.log('create_initial_apps')
-    //await create_initial_apps()
+    // console.log('create_initial_apps')
+    // await create_initial_apps()
     
     main()
 
@@ -66,7 +67,6 @@ const format_accounts = async () => {
       accounts.push(new_acc)
       console.log(acc, new_acc)
     }
-    //process.exit()
     app.accounts = accounts
     app.save()
   }
@@ -77,7 +77,7 @@ let main = async () => {
   while (true) {
     try {
       let i = await convert_accepted_submissions()
-      if(last_day !== moment.utc().dayOfYear() || i > 0 || startup) {
+      if(last_day !== moment.utc().dayOfYear() || i > 0 || (startup && process.env.NODE_ENV === 'production')) {
         if(last_day !== moment.utc().dayOfYear()) last_day = moment.utc().dayOfYear()
         startup = false
 

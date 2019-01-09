@@ -26,7 +26,8 @@ export const TIME_GROUP_QUERY = (last, var_name = 'timestamp', group_var = '') =
 export let query = async (q: string) => {
   try {
     if (!connection) connection = await sql.connect(connection_config)
-    return await sql.query(q)
+    let result = await sql.query(q) 
+    return result ? result.recordsets[0] : []
   } catch (e) {
     console.log(e)
     // ... error checks
@@ -34,7 +35,7 @@ export let query = async (q: string) => {
 }
 
 export let convert_grouped = (result) => {
-  let data = result.recordsets[0]
+  let data = result
   data = data.map(x => {
     const y = Object.values(x)[0]
     let value = parseFloat(y[0].toFixed(3))
@@ -47,7 +48,7 @@ export let convert_grouped = (result) => {
 }
 
 export let convert_grouped_with_users = (result) => {
-  let data = result.recordsets[0]
+  let data = result
   data = data.map(x => {
     const from = Object.values(x)[0]
     const time = Object.values(x)[1]
