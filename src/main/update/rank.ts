@@ -9,7 +9,7 @@ export const update_rank = async () => {
     for (let app of apps) {
       rankings[i] = { name: app.name, data: [] }
       for (let sort_type of ['dau', 'tx', 'volume_sbd', 'volume_steem', 'rewards_sbd', 'rewards_steem', 'steempower_effective']) {
-        for (let time of ['last_day', 'last_week', 'last_month']) {
+        for (let time of ['last_day', 'before_last_day', 'last_week', 'before_last_week', 'last_month', 'before_last_month']) {
           rankings[i].data.push({ time, sort_type, points: await get_ranking(app.name, sort_type, time) })
         }
       }
@@ -19,7 +19,7 @@ export const update_rank = async () => {
     let new_rankings = []
     for (let app of rankings) {
       let rank = {}
-      for (let time of ['last_day', 'last_week', 'last_month']) {
+      for (let time of ['last_day', 'before_last_day', 'last_week', 'before_last_week', 'last_month', 'before_last_month']) {
         let data = app.data.filter(x => x.time === time)
         rank[time] = data.reduce((a, b) => {
           return a.points || a.points === 0 ? a.points + b.points : a + b.points
@@ -31,13 +31,13 @@ export const update_rank = async () => {
     }
 
     let ranks = {}
-    for (let time of ['last_day', 'last_week', 'last_month']) {
+    for (let time of ['last_day', 'before_last_day', 'last_week', 'before_last_week', 'last_month', 'before_last_month']) {
       ranks[time] = _(new_rankings).orderBy([time], ['desc']).map(x => x.name).value()
     }
 
     //console.log(rankings[0].data)
     for (let app of apps) {
-      for (let time of ['last_day', 'last_week', 'last_month']) {
+      for (let time of ['last_day', 'before_last_day', 'last_week', 'before_last_week', 'last_month', 'before_last_month']) {
         app.rank[time] = ranks[time].indexOf(app.name) + 1
       }
       app.markModified('rank')
