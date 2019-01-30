@@ -1,5 +1,5 @@
 
-import { dau_meta, dau_transfers, dau_custom, dau_benefactor } from '../queries/dau'
+import { dau_meta, dau_transfers, dau_custom, dau_benefactor, dau_vote_general } from '../queries/dau'
 import { tx_custom, tx_meta, tx_transfers } from '../queries/tx'
 import { volume_transfers } from '../queries/volume'
 import { rewards_benefactor, rewards_curation } from '../queries/rewards'
@@ -14,6 +14,10 @@ import * as _ from 'lodash'
 import moment = require('moment')
 
 export let update_data = async () => {
+
+  // Update CUSTOM JSON DAU for 'vote'
+  await dau_vote_general(moment.utc().subtract(62, 'd').toISOString())
+
   let apps = await db_app.find_approved(true)
   for (let app of apps) {
     try {
@@ -21,14 +25,17 @@ export let update_data = async () => {
         continue
       }
 
-      let last_update_data = moment.utc().subtract(62, 'd').toISOString()
-      console.log('Updating data', app.name, moment.utc(app.last_update_data).day())
+      let missing_days = moment.utc().dayOfYear() - moment.utc(app.last_update_data).dayOfYear()
+      if(missing_days > 62) missing_days = 62
+      if(missing_days <= 0) missing_days = 0
+      let last_update_data = moment.utc().subtract(missing_days + 2, 'd').toISOString()
+      console.log('Updating data', app.name, last_update_data)
       for (let acc of app.accounts) {
-        
+
         try {
           // Incoming Transfers
           if (acc.transfer || acc.transfer_only_dau) {
-            if(!acc.transfer_only_dau) {
+            if (!acc.transfer_only_dau) {
               for (let asset of ['SBD', 'STEEM']) {
                 await volume_transfers(app.name, acc.name, asset, last_update_data)
                 await tx_transfers(app.name, acc.name, asset, last_update_data)
@@ -47,7 +54,7 @@ export let update_data = async () => {
           if (acc.benefactor) {
             await dau_benefactor(app.name, acc.name, last_update_data)
             for (let asset of ['SBD', 'STEEM', 'VESTS']) {
-              await rewards_benefactor(app.name, acc.name, asset, last_update_data)  
+              await rewards_benefactor(app.name, acc.name, asset, last_update_data)
             }
           }
 
@@ -112,10 +119,10 @@ export let set_data = async () => {
 
       app.volume = { sbd: add_values(volume_sbd_container), steem: add_values(volume_steem_container) }
       app.rewards = { sbd: add_values(rewards_sbd_container), steem: add_values(rewards_steem_container) }
-      app.last_update = moment.utc().toDate()
+      //app.last_update = moment.utc().toDate()
       await app.save()
 
-       // Sets the Steempower values for App
+      // Sets the Steempower values for App
       await update_steempower(app)
     } catch (error) {
       console.error('set_app', 'set_data', error, app.name)
@@ -130,9 +137,9 @@ let get_date = async (app_name?: string, acc_name?: string, data_type?: string) 
   try {
     let x = {}
     for (let d of ['last_day', 'last_week', 'last_month']) {
-      
+
       // TEMPORARY UNTIL CUSTOM DAU IS FULLY UPDATED
-      if(data_type === _g.data_type.dau_custom && (d === 'last_week' || d === 'last_month')) {
+      if (data_type === _g.data_type.dau_custom && (d === 'last_week' || d === 'last_month')) {
         x[d] = await db_data.get_sum_from_data('last_day', app_name, acc_name, data_type) * (d === 'last_week' ? 7 : 30) // d
         x[`before_${d}`] = await db_data.get_sum_from_data(`${'last_day'}`, app_name, acc_name, data_type) * (d === 'last_week' ? 7 : 30) // before_d
       } else {
@@ -230,7 +237,9 @@ let update_rewards = async (app_name, acc_name) => {
     rewards_steem[1] = await get_date(app_name, acc_name, _g.data_type.rewards_benefactor_vests)
     rewards_steem[2] = await get_date(app_name, acc_name, _g.data_type.rewards_curation)
 
-    return { sbd: add_values(rewards_sbd), steem: add_values(rewards_steem) }
+    const sbd = add_values(rewards_sbd)
+    const steem = add_values(rewards_steem)
+    return { sbd, steem }
   } catch (error) {
     console.error('update_rewards', error, app_name)
   }

@@ -8,6 +8,8 @@ import { update_rank } from './main/update/rank'
 import { convert_accepted_submissions } from './main/submission/accept'
 import { query } from './main/queries/query'
 
+import * as dau_query from './main/queries/dau'
+
 import * as db_app from './database/app.db'
 import * as db_data from './database/data.db'
 
@@ -31,9 +33,6 @@ export let start = async () => {
     }
 
     // await format_accounts()
-    // Create the initial Apps
-    // console.log('create_initial_apps')
-    // await create_initial_apps()
     
     main()
 
@@ -87,7 +86,6 @@ let main = async () => {
 
         // Update the data from approved Apps
         console.log('update_data')
-
         await update_data()
 
         // Set the data from approved Apps

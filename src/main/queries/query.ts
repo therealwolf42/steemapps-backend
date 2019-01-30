@@ -21,7 +21,17 @@ let last_update = moment.utc().subtract(30, 'd').toISOString()
 
 export const TIMESTAMP = (var_name = 'timestamp') => { return `YEAR(${var_name}), MONTH(${var_name}), DAY(${var_name})` }
 
-export const TIME_GROUP_QUERY = (last, var_name = 'timestamp', group_var = '') => { return `AND ${var_name} > '${last}' GROUP BY ${group_var ? `[${group_var}], ` : ''}${TIMESTAMP(var_name)} ORDER BY ${TIMESTAMP(var_name)} ASC;` }
+export const TIME_GROUP_ORDER_QUERY = (last, var_name = 'timestamp', group_var = '') => {
+  return `${TIME_GROUP_QUERY(last, var_name, group_var)} ${ORDER_QUERY(var_name)}`
+}
+
+export const TIME_GROUP_QUERY = (last, var_name = 'timestamp', group_var = '') => {
+  return `AND ${var_name} > '${last}' GROUP BY ${group_var ? `[${group_var}], ` : ''}${TIMESTAMP(var_name)}`
+}
+
+export const ORDER_QUERY = (var_name) => {
+  return ` ORDER BY ${TIMESTAMP(var_name)} ASC;`
+}
 
 export let query = async (q: string) => {
   try {
@@ -66,5 +76,43 @@ export let convert_grouped_with_users = (result) => {
     new_data.push({ value: timeframe.length, timestamp, users: timeframe.map(x => x.from) })
   }
   
+  return new_data
+}
+
+export let convert_general_grouped_with_users = (result) => {
+  let data = result
+
+  // Go through the array from the query and map it with the data we need
+  data = data.map(x => {
+    const from = Object.values(x)[0]
+    const metadata:any = Object.values(x)[1]
+    const time = Object.values(x)[2]
+    return {
+      from,
+      app: JSON.parse(metadata)['app'],
+      timestamp: moment.utc(`${time[0]}-${time[1] < 10 ? '0' + time[1] : time[1]}-${time[2] < 10 ? '0' + time[2] : time[2]}`).toDate(),
+    }
+  })
+
+  // Filter out the current day
+  data = data.filter(x => moment.utc(x.timestamp).format('YYYY-MM-D') !== moment.utc().format('YYYY-MM-D'))
+
+  // Group by app
+  data = _(data).groupBy(x => x.app).value()
+
+  let new_data = {}
+  // Go through each app
+  for(let app in data) {
+    // Group data in app by timestamp .orderBy(['from'], ['asc'])
+    data[app] = _(data[app]).groupBy(x => moment.utc(x.timestamp).toISOString()).value()
+
+    // Go through each timestamp and create the structure we need
+    for(let timestamp in data[app]) {
+      let timeframe = data[app][timestamp]
+      if(!new_data[app]) new_data[app] = []
+      new_data[app].push({ value: timeframe.length, timestamp, users: timeframe.map(x => x.from) })
+    }
+  }
+
   return new_data
 }
