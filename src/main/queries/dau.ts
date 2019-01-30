@@ -76,14 +76,17 @@ export let dau_benefactor = async (app: string, account: string, last_update) =>
 }
 
 export let dau_vote_general = async (last_update) => {
-  console.log(`DAU_VOTE_GENERAL`)
-  let q = `SELECT DISTINCT[required_posting_auths], json_metadata, ${TIMESTAMP()} FROM TxCustoms WHERE left(tid, ${'vote'.length}) = 'vote' ${TIME_GROUP_QUERY(last_update, 'timestamp', 'required_posting_auths')}, json_metadata ${ORDER_QUERY('timestamp')}`
-  const result = await query(q)
-  const data_type = `DAU_VOTE_GENERAL`.toLowerCase()
-  const data = convert_general_grouped_with_users(result)
-  for(let app in data) {
-    await db_data.create_or_add_both(app, data_type, data[app])
+  try {
+    console.log(`DAU_VOTE_GENERAL`)
+    let q = `SELECT DISTINCT[required_posting_auths], json_metadata, ${TIMESTAMP()} FROM TxCustoms WHERE left(tid, ${'vote'.length}) = 'vote' ${TIME_GROUP_QUERY(last_update, 'timestamp', 'required_posting_auths')}, json_metadata ${ORDER_QUERY('timestamp')}`
+    const result = await query(q)
+    const data_type = `DAU_VOTE_GENERAL`.toLowerCase()
+    const data = convert_general_grouped_with_users(result)
+    for(let app in data) {
+      await db_data.create_or_add_both(app, data_type, data[app])
+    }
+  } catch (error) {
+    console.error('dau_vote_general', error)
   }
   
-  console.log(data)
 }
