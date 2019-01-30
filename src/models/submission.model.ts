@@ -14,6 +14,7 @@ const schema = new mongoose.Schema({
       curation: { type: Boolean, default: false },
       transfer: { type: Boolean, default: false },
       transfer_only_dau: { type: Boolean, default: false },
+      account_creator: { type: Boolean, default: false },
       meta: { type: Boolean, default: false },
       delegation: { type: Boolean, default: false },
       posting: { type: Boolean, default: false },

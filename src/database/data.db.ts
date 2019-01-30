@@ -100,7 +100,7 @@ export let create_or_add = async (external: boolean, app: string, data_type: str
 export let create_total_dau = async (app: string) => {
   let data = []
   // Get all data from accounts and group based on date
-  for(let data_type of [_g.data_type.dau_custom, _g.data_type.dau_meta, _g.data_type.dau_transfers, _g.data_type.dau_benefactor]) {
+  for(let data_type of [_g.data_type.dau_custom, _g.data_type.dau_meta, _g.data_type.dau_transfers, _g.data_type.dau_benefactor, _g.data_type.dau_vote_general]) {
     let data_db = await find_intern(app, '', data_type)
     for (let d of data_db) {
       data = data.concat(d.data)

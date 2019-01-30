@@ -34,6 +34,7 @@ export const data_type = {
   dau_transfers: 'dau_transfers',
   dau_meta: 'dau_meta',
   dau_custom: 'dau_custom',
+  dau_vote_general: 'dau_vote_general',
   dau_total: 'dau_total',
   tx_meta: 'tx_meta',
   rewards_benefactor_sbd: 'rewards_benefactor_sbd',
