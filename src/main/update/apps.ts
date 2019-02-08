@@ -22,7 +22,7 @@ export let update_data = async () => {
     dau_general('vote', d),
     dau_general('transfer', d),
     dau_general('delegate', d),
-    dau_general('active', d)
+    dau_general('active_user', d)
   ])
   
   // dau_general('follow', d) # for the future
