@@ -1,21 +1,12 @@
-const sql = require('mssql')
+
 import * as _g from '../../_g'
 
 import * as moment from 'moment'
 import * as _ from 'lodash'
 
 import * as convert from '../../helpers/convert'
+import { isArray } from 'util';
 
-let connection = null
-
-const connection_config = {
-  user: process.env.steemsql_user,
-  password: process.env.steemsql_pw,
-  server: process.env.steemsql_server,
-  database: 'DBSteem',
-  connectionTimeout: 10000, // 5 Minutes
-  requestTimeout: 1000 * 60 * 60 // 5 Minutes
-}
 
 let last_update = moment.utc().subtract(30, 'd').toISOString()
 
@@ -35,8 +26,8 @@ export const ORDER_QUERY = (var_name) => {
 
 export let query = async (q: string) => {
   try {
-    if (!connection) connection = await sql.connect(connection_config)
-    let result = await sql.query(q) 
+    
+    let result = await _g.sql.query(q) 
     return result ? result.recordsets[0] : []
   } catch (e) {
     console.log(e)
@@ -79,17 +70,25 @@ export let convert_grouped_with_users = (result) => {
   return new_data
 }
 
-export let convert_general_grouped_with_users = (result) => {
+export let convert_general_grouped_with_users = async (result) => {
   let data = result
 
   // Go through the array from the query and map it with the data we need
   data = data.map(x => {
     const from = Object.values(x)[0]
-    const metadata:any = Object.values(x)[1]
+    let metadata:any = Object.values(x)[1]
+
+    // If the json is an array
+    if(metadata.substring(0, 1) == '[') {
+      metadata = JSON.parse(metadata)[1]
+    } else {
+      metadata = JSON.parse(metadata)
+    }
+    
     const time = Object.values(x)[2]
     return {
       from,
-      app: JSON.parse(metadata)['app'],
+      app: metadata['app'],
       timestamp: moment.utc(`${time[0]}-${time[1] < 10 ? '0' + time[1] : time[1]}-${time[2] < 10 ? '0' + time[2] : time[2]}`).toDate(),
     }
   })

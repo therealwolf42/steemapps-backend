@@ -1,5 +1,5 @@
 
-import { dau_meta, dau_transfers, dau_custom, dau_benefactor, dau_vote_general } from '../queries/dau'
+import { dau_meta, dau_transfers, dau_custom, dau_benefactor, dau_general } from '../queries/dau'
 import { tx_custom, tx_meta, tx_transfers } from '../queries/tx'
 import { volume_transfers } from '../queries/volume'
 import { rewards_benefactor, rewards_curation } from '../queries/rewards'
@@ -15,8 +15,16 @@ import moment = require('moment')
 
 export let update_data = async () => {
 
-  // Update CUSTOM JSON DAU for 'vote'
-  await dau_vote_general(moment.utc().subtract(62, 'd').toISOString())
+  // Update CUSTOM JSON DAU for 'vote', 'transfer' & 'delegate'
+  const d = moment.utc().subtract(62, 'd').toISOString()
+
+  let x = await Promise.all([
+    dau_general('vote', d),
+    dau_general('transfer', d),
+    dau_general('delegate', d)
+  ])
+  
+  // dau_general('follow', d) # for the future
 
   let apps = await db_app.find_approved(true)
   for (let app of apps) {
