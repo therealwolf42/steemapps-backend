@@ -21,6 +21,7 @@ const accountSchema = Joi.object({
   delegation: Joi.boolean(),
   posting: Joi.boolean(),
   logo: Joi.boolean(),
+  account_creator: Joi.boolean(),
   account_types: Joi.array()
 }).required()
 

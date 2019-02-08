@@ -1,4 +1,5 @@
 export const USE_TESTNET = false
+export const sql = require('mssql')
 
 export let global_properties = {}
 
@@ -47,6 +48,14 @@ export const app_type = {
   app: 'app',
   dapp: 'dapp',
   interface: 'interface'
+}
+
+export const tx_type = {
+  vote: 'vote',
+  transfer: 'transfer',
+  //transfer_to_vesting: 'transfer_to_vesting',
+  delegate: 'delegate'
+  //follow: 'follow'
 }
 
 export const account_types = {

@@ -19,16 +19,16 @@ export let dau_transfers = async (app: string, account: string, last_update) => 
 
     const result_incoming = await query(query_incoming)
     const result_outgoing = await query(query_outgoing)
-    
+
     const data_type = `dau_transfers`
     const data_incoming = convert_grouped_with_users(result_incoming)
     const data_outgoing = convert_grouped_with_users(result_outgoing)
-    
+
     let data = data_incoming // db_data.create_grouped_data_users(create_arr_of_arrays([data_incoming, data_outgoing]))
 
     await db_data.create_or_add_both(app, data_type, data, account)
-    await db_data.create_or_add_both(app, `${data_type}_outgoing`, db_data.create_grouped_data_users(data_outgoing), account) 
-    await db_data.create_or_add_both(app, `${data_type}_incoming`, db_data.create_grouped_data_users(data_incoming), account) 
+    await db_data.create_or_add_both(app, `${data_type}_outgoing`, db_data.create_grouped_data_users(data_outgoing), account)
+    await db_data.create_or_add_both(app, `${data_type}_incoming`, db_data.create_grouped_data_users(data_incoming), account)
   } catch (error) {
     console.error('dau_transfers', error, app, account)
   }
@@ -75,18 +75,20 @@ export let dau_benefactor = async (app: string, account: string, last_update) =>
   }
 }
 
-export let dau_vote_general = async (last_update) => {
+export let dau_general = async (general_type, last_update) => {
   try {
-    console.log(`DAU_VOTE_GENERAL`)
-    let q = `SELECT DISTINCT[required_posting_auths], json_metadata, ${TIMESTAMP()} FROM TxCustoms WHERE left(tid, ${'vote'.length}) = 'vote' ${TIME_GROUP_QUERY(last_update, 'timestamp', 'required_posting_auths')}, json_metadata ${ORDER_QUERY('timestamp')}`
+    console.log(`DAU_${general_type.toUpperCase()}_GENERAL`)
+    let q = `SELECT DISTINCT[required_posting_auths], json_metadata, ${TIMESTAMP()} FROM TxCustoms WHERE left(tid, ${general_type.length}) = '${general_type}' ${TIME_GROUP_QUERY(last_update, 'timestamp', 'required_posting_auths')}, json_metadata ${ORDER_QUERY('timestamp')}`
     const result = await query(q)
-    const data_type = `DAU_VOTE_GENERAL`.toLowerCase()
+    const data_type = `DAU_${general_type}_GENERAL`.toLowerCase()
     const data = convert_general_grouped_with_users(result)
-    for(let app in data) {
-      await db_data.create_or_add_both(app, data_type, data[app])
+    for (let app in data) {
+      if(app && app != undefined) {
+        await db_data.create_or_add_both(app, data_type, data[app])
+      }
     }
+    return true
   } catch (error) {
-    console.error('dau_vote_general', error)
+    console.error('dau_general', error, general_type)
   }
-  
 }

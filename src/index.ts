@@ -26,11 +26,23 @@ export var stop_bool = false
 let last_day = moment.utc().dayOfYear()
 let startup = true
 
+const connection_config = {
+  user: process.env.steemsql_user,
+  password: process.env.steemsql_pw,
+  server: process.env.steemsql_server,
+  database: 'DBSteem',
+  connectionTimeout: 10000, // 5 Minutes
+  requestTimeout: 1000 * 60 * 60 // 5 Minutes
+}
+
 export let start = async () => {
   try {
     while (!connected) {
       await try_connection()
     }
+
+    let connection = null
+    if (!connection) connection = await _g.sql.connect(connection_config)
 
     // await format_accounts()
     
