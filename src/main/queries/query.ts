@@ -70,7 +70,7 @@ export let convert_grouped_with_users = (result) => {
   return new_data
 }
 
-export let convert_general_grouped_with_users = async (result) => {
+export let convert_general_grouped_with_users = (result) => {
   let data = result
 
   // Go through the array from the query and map it with the data we need
