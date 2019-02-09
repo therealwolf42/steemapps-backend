@@ -109,7 +109,8 @@ export let convert_general_grouped_with_users = (result) => {
     for(let timestamp in data[app]) {
       let timeframe = data[app][timestamp]
       if(!new_data[app]) new_data[app] = []
-      new_data[app].push({ value: timeframe.length, timestamp, users: timeframe.map(x => x.from) })
+      const users = Array.from(new Set(timeframe.map(x => x.from)))
+      new_data[app].push({ value: users.length, timestamp, users })
     }
   }
 
