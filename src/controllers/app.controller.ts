@@ -20,13 +20,13 @@ export const get_app = async (req, res) => {
 }
 
 export const submit = async (req, res) => {
-  let { name, display_name, link, logo, product_screenshot, description, short_description, status, app_type, category, social, accounts, custom_jsons } = req.body
+  let { name, display_name, link, ref_link, logo, product_screenshot, description, short_description, status, app_type, category, social, accounts, custom_jsons } = req.body
   if (!name) name = convert.clean_string(display_name)
 
   let message = ''
 
   await SubmissionModel.Submission.create({
-    display_name, name, accounts, description, short_description, app_type, logo, product_screenshot, link, social, status, category, custom_jsons
+    display_name, name, accounts, description, short_description, app_type, logo, product_screenshot, link, ref_link, social, status, category, custom_jsons
   })
 
   return res.status(200).send({ message })
