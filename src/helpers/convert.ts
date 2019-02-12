@@ -52,7 +52,7 @@ export let get_change = (x: {}) => {
 
     //x[`change_${d}`] = `${((x[d] / x[`before_${d}`] - 1) * 100).toFixed(2)}%`
     if(before === 0 || isNaN(before)) {
-      change = parseFloat((current / 100).toFixed(3))
+      change = parseFloat((current).toFixed(3))
     } else {
       change = parseFloat((current / before).toFixed(3))
     }
