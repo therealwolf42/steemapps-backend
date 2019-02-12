@@ -47,10 +47,15 @@ export let add_values_total_users = (values) => {
 export let get_change = (x: {}) => {
   for (let d of ['last_day', 'last_week', 'last_month']) {
     let current = x[d] || 0
-    let before = x[`before_${d}`] || 0
+    let before = x[`before_${d}`] || 0 
+    let change = 0
 
     //x[`change_${d}`] = `${((x[d] / x[`before_${d}`] - 1) * 100).toFixed(2)}%`
-    let change = parseFloat((current / before).toFixed(3))
+    if(before === 0 || isNaN(before)) {
+      change = parseFloat((current / 100).toFixed(3))
+    } else {
+      change = parseFloat((current / before).toFixed(3))
+    }
     x[`change_${d}`] = isNaN(change) ? 0 : change
   }
   return x
