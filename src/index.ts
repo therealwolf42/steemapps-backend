@@ -43,8 +43,6 @@ export let start = async () => {
 
     let connection = null
     if (!connection) connection = await _g.sql.connect(connection_config)
-
-    // await format_accounts()
     
     main()
 
@@ -125,5 +123,31 @@ let try_connection = async () => {
   } else {
     connected = false;
     connection = await db.connect()
+  }
+}
+
+
+const clean_old_data_entries = async () => {
+  console.log('Cleaning up entries')
+  // Detailed /w users
+  await do_cleaning(await db_data.find_intern())
+
+  // Lean w/o users
+  await do_cleaning(await db_data.find_extern())
+  console.log('Finished cleanup')
+}
+
+const do_cleaning = async (data_objects) => {
+  const days = 62
+  for(const o of data_objects) {
+    const data = []
+    for(let d of o.data) {
+      if(moment.utc(d.timestamp).valueOf() >= moment.utc().subtract(days, 'd').valueOf()) {
+        data.push(d)
+      }
+    }
+    o.data = data
+    o.markModified('data')
+    await o.save()
   }
 }
