@@ -173,6 +173,7 @@ let get_date_dau = async (app_name?: string, acc_name?: string, data_type?: stri
     for (let d of ['last_day', 'last_week', 'last_month']) {
       x[d] = await db_data.get_sum_from_data_dau(d, app_name, acc_name, data_type)
       x[`before_${d}`] = await db_data.get_sum_from_data_dau(`before_${d}`, app_name, acc_name, data_type)
+      if(!x[d] || x[d] <= 0) x[d] =  x[`before_${d}`]
     }
     return x
   } catch (error) {
